@@ -199,6 +199,21 @@ class AuditLog(BaseModel):
 
 # ============ HELPER FUNCTIONS ============
 
+def clean_mongo_doc(doc):
+    """Remove MongoDB ObjectId and convert to serializable format"""
+    if doc is None:
+        return None
+    if isinstance(doc, list):
+        return [clean_mongo_doc(item) for item in doc]
+    if isinstance(doc, dict):
+        cleaned = {}
+        for key, value in doc.items():
+            if key == '_id':
+                continue  # Skip MongoDB ObjectId
+            cleaned[key] = clean_mongo_doc(value) if isinstance(value, (dict, list)) else value
+        return cleaned
+    return doc
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
