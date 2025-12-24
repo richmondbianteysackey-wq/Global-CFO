@@ -666,7 +666,7 @@ async def get_audit_logs(
         query['company_id'] = company_id
     
     logs = await db.audit_logs.find(query).sort("timestamp", -1).to_list(1000)
-    return logs
+    return [clean_mongo_doc(log) for log in logs]
 
 
 # Include the router in the main app
