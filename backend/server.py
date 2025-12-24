@@ -341,12 +341,10 @@ async def login(credentials: UserLogin):
 
 @api_router.get("/auth/me")
 async def get_me(current_user: dict = Depends(get_current_user)):
-    user_data = dict(current_user)
-    if '_id' in user_data:
-        del user_data['_id']
-    if 'password' in user_data:
-        del user_data['password']
-    return user_data
+    clean_user = clean_mongo_doc(current_user)
+    if 'password' in clean_user:
+        del clean_user['password']
+    return clean_user
 
 
 # ============ COMPANY ENDPOINTS ============
