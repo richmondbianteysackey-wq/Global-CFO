@@ -531,7 +531,7 @@ async def get_transactions(
             query['company_id'] = current_user['company_id']
     
     transactions = await db.transactions.find(query).to_list(1000)
-    return transactions
+    return [clean_mongo_doc(txn) for txn in transactions]
 
 
 @api_router.put("/transactions/{transaction_id}", response_model=Transaction)
