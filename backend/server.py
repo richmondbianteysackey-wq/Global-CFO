@@ -379,7 +379,7 @@ async def get_companies(current_user: dict = Depends(get_current_user)):
     else:
         companies = await db.companies.find({"owner_id": current_user['id']}).to_list(1000)
     
-    return companies
+    return [clean_mongo_doc(company) for company in companies]
 
 
 @api_router.get("/companies/{company_id}", response_model=Company)
