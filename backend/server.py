@@ -393,7 +393,7 @@ async def get_company(company_id: str, current_user: dict = Depends(get_current_
         if company['owner_id'] != current_user['id']:
             raise HTTPException(status_code=403, detail="Access denied")
     
-    return company
+    return clean_mongo_doc(company)
 
 
 @api_router.put("/companies/{company_id}", response_model=Company)
