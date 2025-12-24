@@ -481,7 +481,7 @@ async def get_document(document_id: str, current_user: dict = Depends(get_curren
     
     await log_audit(current_user['id'], "view", "document", document_id, document.get('company_id'))
     
-    return document
+    return clean_mongo_doc(document)
 
 
 @api_router.delete("/documents/{document_id}")
