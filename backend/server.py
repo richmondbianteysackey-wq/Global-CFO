@@ -327,14 +327,15 @@ async def login(credentials: UserLogin):
     
     access_token = create_access_token(data={"sub": user['id']})
     
-    # Remove password from response
-    del user['password']
-    del user['_id']
+    # Clean and prepare response
+    clean_user = clean_mongo_doc(user)
+    if 'password' in clean_user:
+        del clean_user['password']
     
     return Token(
         access_token=access_token,
         token_type="bearer",
-        user=user
+        user=clean_user
     )
 
 
