@@ -1,0 +1,159 @@
+{
+  "design_system": {
+    "identity": {
+      "name": "Global CFO LLC",
+      "archetype": "Swiss & High-Contrast",
+      "core_values": ["Authority", "Clarity", "Precision", "Trust"],
+      "emotional_tone": "Professional, Secure, Efficient, Modern"
+    },
+    "typography": {
+      "font_family": {
+        "headings": "Chivo, sans-serif",
+        "body": "Manrope, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "weights": {
+        "headings": "800",
+        "subheadings": "600",
+        "body": "400",
+        "bold": "700"
+      },
+      "scale": {
+        "h1": "text-5xl md:text-6xl tracking-tight leading-none",
+        "h2": "text-4xl md:text-5xl tracking-tight",
+        "h3": "text-2xl md:text-3xl tracking-tight",
+        "body_lg": "text-lg leading-relaxed",
+        "body_base": "text-base leading-relaxed",
+        "caption": "text-sm text-muted-foreground uppercase tracking-widest"
+      },
+      "import_url": "https://fonts.googleapis.com/css2?family=Chivo:wght@400;600;800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap"
+    },
+    "colors": {
+      "palette": {
+        "primary": {
+          "DEFAULT": "#0F172A",
+          "foreground": "#F8FAFC",
+          "description": "Deep Slate/Navy for authority and structure"
+        },
+        "secondary": {
+          "DEFAULT": "#F1F5F9",
+          "foreground": "#0F172A",
+          "description": "Light Slate for subtle backgrounds"
+        },
+        "accent": {
+          "DEFAULT": "#2563EB",
+          "foreground": "#FFFFFF",
+          "description": "Royal Blue for primary actions and trust"
+        },
+        "success": {
+          "DEFAULT": "#10B981",
+          "description": "Emerald for positive financial metrics"
+        },
+        "warning": {
+          "DEFAULT": "#F59E0B",
+          "description": "Amber for alerts and pending actions"
+        },
+        "destructive": {
+          "DEFAULT": "#EF4444",
+          "description": "Red for errors and negative values"
+        },
+        "background": {
+          "light": "#FFFFFF",
+          "dark": "#020617",
+          "subtle": "#F8FAFC"
+        },
+        "border": {
+          "light": "#E2E8F0",
+          "dark": "#1E293B"
+        }
+      },
+      "usage_rules": {
+        "gradients": "Minimal usage. Only for subtle active states or hero backgrounds. No full-screen gradients.",
+        "text_contrast": "Always ensure WCAG AA compliance. Use slate-600 for secondary text, never lighter.",
+        "dashboard_data": "Use semantic colors (green/red) sparingly. Most data should be neutral (slate-900) to reduce cognitive load."
+      }
+    },
+    "layout": {
+      "spacing_scale": "Generous. Use p-6, p-8, p-12 for containers. Gap-6 or Gap-8 for grids.",
+      "container_width": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+      "border_radius": {
+        "default": "rounded-sm",
+        "card": "rounded-md",
+        "button": "rounded-none"
+      },
+      "grids": {
+        "marketing": "Tetris Grid: Asymmetrical, mixing large hero blocks with smaller detail squares.",
+        "dashboard": "Control Room Grid: Dense, 4-column layout. Widgets stretch to fill height."
+      }
+    },
+    "components": {
+      "buttons": {
+        "primary": "bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 rounded-none font-bold uppercase tracking-wide transition-all",
+        "secondary": "bg-secondary text-secondary-foreground hover:bg-secondary/80 h-11 px-8 rounded-none font-semibold transition-all",
+        "outline": "border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground h-11 px-8 rounded-none font-bold uppercase transition-all"
+      },
+      "cards": {
+        "style": "bg-card text-card-foreground border border-border shadow-none rounded-md hover:border-accent/50 transition-colors",
+        "dashboard_widget": "bg-white border border-slate-200 p-6 flex flex-col h-full"
+      },
+      "inputs": {
+        "style": "h-11 rounded-sm border-slate-300 focus:ring-2 focus:ring-accent focus:border-transparent bg-white"
+      }
+    },
+    "visual_enhancers": {
+      "shadows": "Minimal. Use 'shadow-sm' for depth. Avoid large, diffuse shadows.",
+      "borders": "Crisp 1px borders are the primary separator. Use 'divide-y' and 'divide-x' utilities.",
+      "textures": "Subtle noise overlay on dark backgrounds to prevent banding and add 'paper' feel.",
+      "glassmorphism": "Use only for sticky headers: bg-white/80 backdrop-blur-md border-b border-slate-200/50."
+    },
+    "motion": {
+      "transitions": "transition-all duration-200 ease-out",
+      "hover_effects": "Subtle lift (-translate-y-0.5) for cards. Color shift for buttons.",
+      "loading": "Skeleton loaders for data. No spinners for page loads."
+    }
+  },
+  "assets": {
+    "images": {
+      "hero_main": {
+        "url": "https://images.pexels.com/photos/3810792/pexels-photo-3810792.jpeg",
+        "alt": "Diverse finance team in modern office meeting",
+        "category": "Hero Section"
+      },
+      "feature_accountant": {
+        "url": "https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg",
+        "alt": "Professional accountant working on laptop with financial data",
+        "category": "Features - Expertise"
+      },
+      "feature_trust": {
+        "url": "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg",
+        "alt": "Business handshake close up",
+        "category": "Features - Trust & Partnership"
+      },
+      "abstract_growth": {
+        "url": "https://images.pexels.com/photos/7172774/pexels-photo-7172774.jpeg",
+        "alt": "Minimalist abstract financial growth graph",
+        "category": "Background / Abstract"
+      }
+    },
+    "icons": {
+      "library": "lucide-react",
+      "style": "Stroke width 1.5px. Color: slate-600 (default) or accent (active)."
+    }
+  },
+  "instructions_to_main_agent": {
+    "general": "You are building a high-trust, professional financial application. Precision is key. Do not use rounded, bubbly UI. Stick to the 'Swiss' aesthetic: clean lines, strong typography, and structured grids.",
+    "landing_page": "Use the 'Tetris Grid' layout. The hero section should be bold with the 'hero_main' image. Use 'Chivo' font for a massive headline. Emphasize the 'Secure' and 'CFO' aspects.",
+    "dashboard": "Use the 'Control Room' grid. It must be dense but readable. Use 'Manrope' for all data tables and numbers. Ensure high contrast for text. Do not use card shadows; use borders.",
+    "auth_pages": "Split screen layout. Left side: Login form (clean, minimal). Right side: 'abstract_growth' image with a dark overlay and a testimonial quote.",
+    "charts": "Use Recharts or Shadcn Charts. Style them to match the palette (Slate, Blue, Emerald). Avoid rainbow colors.",
+    "accessibility": "Ensure all text meets WCAG AA contrast. All inputs must have visible focus states (ring-2 ring-accent)."
+  },
+  "universal_guidelines": [
+    "Do not use gradients for text or buttons.",
+    "Do not center-align long text blocks.",
+    "Use 'data-testid' on all interactive elements.",
+    "Use 'sonner' for toast notifications.",
+    "Never use 'Inter' for headings.",
+    "Always use 'lucide-react' for icons."
+  ]
+}
