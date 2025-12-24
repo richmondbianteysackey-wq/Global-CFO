@@ -416,7 +416,7 @@ async def update_company(company_id: str, company_data: CompanyCreate, current_u
     await log_audit(current_user['id'], "update", "company", company_id, company_id)
     
     updated_company = await db.companies.find_one({"id": company_id})
-    return updated_company
+    return clean_mongo_doc(updated_company)
 
 
 # ============ DOCUMENT ENDPOINTS ============
