@@ -470,7 +470,7 @@ async def get_documents(
             query['company_id'] = current_user['company_id']
     
     documents = await db.documents.find(query, {"file_data": 0}).to_list(1000)
-    return documents
+    return [clean_mongo_doc(doc) for doc in documents]
 
 
 @api_router.get("/documents/{document_id}")
