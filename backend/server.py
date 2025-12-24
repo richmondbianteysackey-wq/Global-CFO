@@ -556,7 +556,7 @@ async def update_transaction(
     await log_audit(current_user['id'], "update", "transaction", transaction_id, transaction['company_id'])
     
     updated_transaction = await db.transactions.find_one({"id": transaction_id})
-    return updated_transaction
+    return clean_mongo_doc(updated_transaction)
 
 
 # ============ TASK/MESSAGE ENDPOINTS ============
