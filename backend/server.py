@@ -617,7 +617,7 @@ async def get_messages(
     current_user: dict = Depends(get_current_user)
 ):
     messages = await db.messages.find({"company_id": company_id}).to_list(1000)
-    return messages
+    return [clean_mongo_doc(msg) for msg in messages]
 
 
 # ============ REPORTS ENDPOINTS ============
