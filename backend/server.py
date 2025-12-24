@@ -592,7 +592,7 @@ async def get_tasks(
             query['company_id'] = current_user['company_id']
     
     tasks = await db.tasks.find(query).to_list(1000)
-    return tasks
+    return [clean_mongo_doc(task) for task in tasks]
 
 
 @api_router.post("/messages", response_model=Message)
