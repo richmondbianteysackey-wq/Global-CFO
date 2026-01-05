@@ -108,17 +108,17 @@ function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       {/* Header */}
-      <header className="border-b border-slate-200 sticky top-0 bg-white/90 backdrop-blur z-20">
+      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/80 backdrop-blur">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
+          <div className="flex items-center gap-3">
+            <div className="h-11 w-11 border border-slate-200 bg-slate-100 text-primary flex items-center justify-center font-extrabold tracking-tight">
               BB
             </div>
-            <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-500">BizBooks</p>
-              <h1 className="text-xl font-bold text-primary">Bookkeeping • Tax • Advisory</h1>
+            <div className="space-y-0.5">
+              <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Global CFO</p>
+              <h1 className="text-xl font-extrabold text-primary">Bookkeeping • Tax • Advisory</h1>
             </div>
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-700">
@@ -148,106 +148,157 @@ function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <p className="text-sm text-muted-foreground uppercase tracking-[0.2em] mb-3">LAUNCH-READY FINANCE</p>
-            <h1 className="text-5xl md:text-6xl tracking-tight leading-none font-bold text-primary mb-6">
-              Secure bookkeeping, accounting, and tax support for modern teams.
+      <section className="relative overflow-hidden border-b border-slate-200 bg-slate-900 text-slate-50">
+        <div className="absolute inset-0 opacity-60" style={{ backgroundImage: 'radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.12), transparent 35%), radial-gradient(circle at 80% 0%, rgba(15, 23, 42, 0.7), transparent 40%)' }} />
+        <div className="absolute inset-y-8 right-0 hidden lg:block lg:w-1/2">
+          <div
+            className="absolute inset-0 mx-auto rounded-md border border-slate-700/60 bg-slate-800/70"
+            style={{ backgroundImage: 'url(https://images.pexels.com/photos/3810792/pexels-photo-3810792.jpeg)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+          >
+            <div className="absolute inset-0 bg-slate-900/35" />
+          </div>
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 grid lg:grid-cols-[1.05fr,0.95fr] gap-10">
+          <div className="space-y-8">
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge variant="outline" className="rounded-none bg-white/10 border-slate-500 text-slate-50">LAUNCH-READY FINANCE</Badge>
+              <p className="text-xs uppercase tracking-[0.3em] text-slate-300">SOC2-minded • Multi-entity</p>
+            </div>
+            <h1 className="text-5xl md:text-6xl leading-[1.05] tracking-tight font-extrabold">
+              Secure bookkeeping, accounting, and tax support built for modern teams.
             </h1>
-            <p className="text-lg leading-relaxed text-slate-700 mb-8">
-              BizBooks handles monthly close, payroll, and tax prep with audit-ready controls. Upload documents securely
-              or connect Dropbox/Drive—your team stays focused on growth.
+            <p className="text-lg leading-relaxed text-slate-200 max-w-2xl">
+              Global CFO pairs controller oversight with audit-ready workflows. Upload to the vault, sync your own drive, and keep CFOs, founders, and auditors aligned.
             </p>
             <div className="flex flex-wrap gap-4">
               <Button
                 onClick={() => navigate('/intake')}
                 data-testid="hero-get-started-btn"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 rounded-none font-bold uppercase tracking-wide"
+                className="bg-accent text-white hover:bg-accent/90 h-11 px-8 rounded-none font-bold uppercase tracking-wide"
               >
                 Start onboarding
               </Button>
               <Button
                 variant="outline"
                 onClick={() => navigate('/contact')}
-                className="h-11 px-8 rounded-none font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                data-testid="hero-consult-btn"
+                className="h-11 px-8 rounded-none font-semibold border-2 border-white text-white hover:bg-white hover:text-primary"
               >
                 Schedule consultation
               </Button>
             </div>
-            <div className="flex flex-wrap gap-3 mt-6 text-sm text-slate-700">
-              <Badge variant="outline" className="rounded-none border-emerald-200 text-emerald-700">SOC2-minded controls</Badge>
-              <Badge variant="outline" className="rounded-none">Document vault or Dropbox/Drive</Badge>
-              <Badge variant="outline" className="rounded-none">Client messaging & tasks</Badge>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {[{
+                label: 'Audit controls',
+                detail: 'Role-based, log everything',
+              }, {
+                label: 'Close cadence',
+                detail: 'Day-5 monthly close',
+              }, {
+                label: 'Response time',
+                detail: '<2h during business hours',
+              }].map((item) => (
+                <div key={item.label} className="border border-slate-700 bg-slate-800/70 px-4 py-5 flex flex-col gap-1">
+                  <p className="text-xs uppercase tracking-[0.25em] text-slate-300">{item.label}</p>
+                  <p className="text-lg font-semibold text-white">{item.detail}</p>
+                </div>
+              ))}
             </div>
           </div>
-          <Card className="border-slate-200 shadow-sm rounded-none">
-            <CardHeader>
-              <CardTitle className="text-2xl">Quick intake</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form className="space-y-3" onSubmit={handleContactSubmit}>
-                <Input
-                  placeholder="Your name"
-                  value={contactForm.name}
-                  onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                  required
-                  className="h-11 rounded-none"
-                />
-                <Input
-                  type="email"
-                  placeholder="you@company.com"
-                  value={contactForm.email}
-                  onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                  required
-                  className="h-11 rounded-none"
-                />
-                <Input
-                  placeholder="Service interest"
-                  value={contactForm.service_interest}
-                  onChange={(e) => setContactForm({ ...contactForm, service_interest: e.target.value })}
-                  className="h-11 rounded-none"
-                />
-                <Textarea
-                  placeholder="Tell us what you need"
-                  value={contactForm.message}
-                  onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                  rows={3}
-                  required
-                  className="rounded-none"
-                />
-                <Button type="submit" disabled={submitting} className="w-full rounded-none">
-                  {submitting ? 'Sending...' : 'Send securely'}
-                </Button>
-                <p className="text-xs text-slate-600">
-                  Prefer SMS? <Link to="/contact" className="text-primary underline">Capture via text</Link>
-                </p>
-              </form>
-            </CardContent>
-          </Card>
+          <div className="grid gap-4">
+            <Card className="border-slate-200 bg-white shadow-none">
+              <CardHeader className="space-y-2">
+                <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Fast response</p>
+                <CardTitle className="text-2xl text-primary leading-tight">Quick intake</CardTitle>
+                <p className="text-sm text-slate-600">Share what you need and we will route you to the right specialist within one business day.</p>
+              </CardHeader>
+              <CardContent>
+                <form className="space-y-3" onSubmit={handleContactSubmit}>
+                  <Input
+                    placeholder="Your name"
+                    value={contactForm.name}
+                    onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                    required
+                    className="h-11 rounded-none"
+                    data-testid="contact-name"
+                  />
+                  <Input
+                    type="email"
+                    placeholder="you@company.com"
+                    value={contactForm.email}
+                    onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                    required
+                    className="h-11 rounded-none"
+                    data-testid="contact-email"
+                  />
+                  <Input
+                    placeholder="Service interest"
+                    value={contactForm.service_interest}
+                    onChange={(e) => setContactForm({ ...contactForm, service_interest: e.target.value })}
+                    className="h-11 rounded-none"
+                    data-testid="contact-service"
+                  />
+                  <Textarea
+                    placeholder="Tell us what you need"
+                    value={contactForm.message}
+                    onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                    rows={3}
+                    required
+                    className="rounded-none"
+                    data-testid="contact-message"
+                  />
+                  <Button type="submit" disabled={submitting} className="w-full rounded-none" data-testid="contact-submit">
+                    {submitting ? 'Sending...' : 'Send securely'}
+                  </Button>
+                  <p className="text-xs text-slate-600">
+                    Prefer SMS? <Link to="/contact" className="text-primary underline">Capture via text</Link>
+                  </p>
+                </form>
+              </CardContent>
+            </Card>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="border border-slate-200 bg-white px-4 py-5">
+                <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Security</p>
+                <p className="text-lg font-semibold text-primary">SOC 2 Type II-minded guardrails</p>
+                <p className="text-sm text-slate-600 mt-1">Audit logging, least-privilege roles, and reviewer sign-offs.</p>
+              </div>
+              <div className="border border-slate-200 bg-white px-4 py-5">
+                <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Delivery</p>
+                <p className="text-lg font-semibold text-primary">Controller-led close & filings</p>
+                <p className="text-sm text-slate-600 mt-1">Forecasts, payroll, and tax filings managed in one cadence.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Services */}
-      <section id="services" className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-50">
-        <div className="max-w-7xl mx-auto space-y-12">
-          <div className="text-center">
-            <p className="text-sm uppercase tracking-[0.2em] text-slate-500 mb-3">SERVICES</p>
-            <h2 className="text-4xl md:text-5xl tracking-tight font-bold text-primary">One platform, four practice areas</h2>
+      <section id="services" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+        <div className="max-w-7xl mx-auto space-y-10">
+          <div className="text-center space-y-3">
+            <p className="text-xs uppercase tracking-[0.28em] text-slate-500">SERVICES</p>
+            <h2 className="text-4xl md:text-5xl tracking-tight font-extrabold text-primary">One platform, four practice areas</h2>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">Controller-led delivery that keeps your books investor-ready, your payroll compliant, and your tax strategy proactive.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, idx) => (
-              <Card key={service.title} className="border border-slate-200 shadow-none rounded-none bg-white hover:-translate-y-1 transition-transform" data-testid={`feature-card-${idx}`}>
-                <CardHeader className="space-y-2">
-                  <div className="text-primary">{service.icon}</div>
+              <Card
+                key={service.title}
+                className="border border-slate-200 shadow-none rounded-none bg-white hover:-translate-y-1 transition-transform"
+                data-testid={`feature-card-${idx}`}
+              >
+                <CardHeader className="space-y-3">
+                  <div className="h-12 w-12 border border-slate-200 bg-slate-50 text-primary flex items-center justify-center">
+                    {service.icon}
+                  </div>
                   <CardTitle className="text-xl text-primary leading-tight">{service.title}</CardTitle>
-                  <p className="text-sm text-slate-700">{service.description}</p>
+                  <p className="text-sm text-slate-700 leading-relaxed">{service.description}</p>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button onClick={() => navigate(service.link)} className="w-full rounded-none">
+                  <Button onClick={() => navigate(service.link)} className="w-full rounded-none" data-testid={`feature-primary-${idx}`}>
                     Explore {service.title}
                   </Button>
-                  <Button variant="outline" onClick={() => navigate('/intake')} className="w-full rounded-none">
+                  <Button variant="outline" onClick={() => navigate('/intake')} className="w-full rounded-none" data-testid={`feature-secondary-${idx}`}>
                     Get started
                   </Button>
                 </CardContent>
@@ -258,37 +309,45 @@ function LandingPage() {
       </section>
 
       {/* Document management */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-start">
           <div className="space-y-4">
-            <p className="text-sm uppercase tracking-[0.2em] text-slate-500">DOCUMENT CONTROLS</p>
-            <h2 className="text-4xl font-bold text-primary tracking-tight">Secure uploads or connect your drive</h2>
+            <p className="text-xs uppercase tracking-[0.28em] text-slate-500">DOCUMENT CONTROLS</p>
+            <h2 className="text-4xl font-extrabold text-primary tracking-tight">Secure uploads or connect your drive</h2>
             <p className="text-lg text-slate-700">
-              Upload receipts, bank statements, and tax documents directly into the BizBooks vault or share a Dropbox/Google Drive link. Every file includes audit trails and optional retention rules.
+              Upload receipts, bank statements, and tax documents directly into the Global CFO vault or share a Dropbox/Google Drive link. Every file includes audit trails and optional retention rules.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Badge variant="outline" className="rounded-none">10MB upload limit per file</Badge>
-              <Badge variant="outline" className="rounded-none">Audit logging enabled</Badge>
-              <Badge variant="outline" className="rounded-none">SOC2-aligned</Badge>
+            <div className="grid sm:grid-cols-3 gap-3">
+              {[
+                '10MB upload limit per file',
+                'Audit logging enabled',
+                'SOC2-aligned controls',
+              ].map((item) => (
+                <Badge key={item} variant="outline" className="rounded-none text-slate-700 justify-center" data-testid={`doc-pill-${item}`}>
+                  {item}
+                </Badge>
+              ))}
             </div>
             <div className="flex gap-3 flex-wrap">
-              <Button onClick={() => navigate('/documents')} className="rounded-none">
+              <Button onClick={() => navigate('/documents')} className="rounded-none" data-testid="doc-module-btn">
                 View document module
               </Button>
-              <Button variant="outline" onClick={() => navigate('/contact')} className="rounded-none">
+              <Button variant="outline" onClick={() => navigate('/contact')} className="rounded-none" data-testid="doc-request-btn">
                 Request Dropbox/Drive link
               </Button>
             </div>
           </div>
           <Card className="border-slate-200 shadow-sm rounded-none">
-            <CardHeader>
-              <CardTitle className="text-xl">Intake options</CardTitle>
+            <CardHeader className="space-y-2">
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Intake options</p>
+              <CardTitle className="text-xl">Choose how you deliver files</CardTitle>
+              <p className="text-sm text-slate-600">Pick the workflow that matches your compliance posture and team preferences.</p>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-4">
               <div className="flex gap-3 items-start">
                 <UploadCloud className="h-5 w-5 text-primary mt-1" />
                 <div>
-                  <p className="font-semibold text-primary">Upload to BizBooks vault</p>
+                  <p className="font-semibold text-primary">Upload to Global CFO vault</p>
                   <p className="text-sm text-slate-700">Encrypted uploads with audit trails and reviewer assignments.</p>
                 </div>
               </div>
@@ -306,7 +365,7 @@ function LandingPage() {
                   <p className="text-sm text-slate-700">We can enable Tidio or Crisp for live support upon request.</p>
                 </div>
               </div>
-              <Button onClick={() => navigate('/intake')} className="w-full rounded-none">
+              <Button onClick={() => navigate('/intake')} className="w-full rounded-none" data-testid="doc-submit-btn">
                 Submit intake
               </Button>
             </CardContent>
@@ -315,48 +374,59 @@ function LandingPage() {
       </section>
 
       {/* Trust Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <img
-                src="https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg"
-                alt="Professional accountant"
-                className="w-full h-[480px] object-cover rounded-none shadow-sm"
-              />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground uppercase tracking-[0.2em] mb-4">TRUSTED BY BUSINESSES</p>
-              <h2 className="text-4xl md:text-5xl tracking-tight font-bold text-primary mb-6">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-[1.1fr,0.9fr] gap-12 items-center">
+          <div className="relative">
+            <div className="absolute -inset-4 border border-slate-200" />
+            <img
+              src="https://images.pexels.com/photos/5716001/pexels-photo-5716001.jpeg"
+              alt="Professional accountant"
+              className="relative w-full h-[480px] object-cover rounded-none border border-slate-200"
+            />
+          </div>
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <p className="text-xs uppercase tracking-[0.28em] text-slate-500">TRUSTED BY BUSINESSES</p>
+              <h2 className="text-4xl md:text-5xl tracking-tight font-extrabold text-primary">
                 Professional accounting you can trust
               </h2>
-              <p className="text-lg leading-relaxed text-slate-700 mb-6">
+              <p className="text-lg leading-relaxed text-slate-700">
                 Our CPAs and payroll specialists deliver compliant, audit-ready books for startups, agencies, and established businesses.
               </p>
-              <ul className="space-y-4">
-                {[
-                  'Certified Public Accountants (CPAs)',
-                  'SOC 2 Type II-minded processes',
-                  'GDPR & Data Privacy aware',
-                  '24/7 monitoring & support SLAs',
-                ].map((item, idx) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <CheckCircle className="h-6 w-6 text-emerald-500" strokeWidth={1.5} />
-                    <span className="text-base text-slate-700">{item}</span>
-                  </li>
-                ))}
-              </ul>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {[
+                'Certified Public Accountants (CPAs)',
+                'SOC 2 Type II-minded processes',
+                'GDPR & data privacy aware',
+                '24/7 monitoring & support SLAs',
+              ].map((item) => (
+                <div key={item} className="border border-slate-200 bg-slate-50 px-4 py-4 flex gap-3 items-start">
+                  <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5" strokeWidth={1.5} />
+                  <p className="text-sm text-slate-800 leading-relaxed">{item}</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-3 flex-wrap">
+              <Button onClick={() => navigate('/intake')} className="rounded-none" data-testid="trust-intake-btn">
+                Talk to an expert
+              </Button>
+              <Button variant="outline" onClick={() => navigate('/services/bookkeeping')} className="rounded-none" data-testid="trust-services-btn">
+                View approach
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials & Blog */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8">
-          <Card className="border-slate-200 shadow-sm rounded-none">
-            <CardHeader>
-              <CardTitle className="text-2xl">Testimonials</CardTitle>
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr,0.95fr] gap-8">
+          <Card className="border-slate-200 shadow-none rounded-none">
+            <CardHeader className="space-y-2">
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Proof</p>
+              <CardTitle className="text-2xl text-primary">Testimonials</CardTitle>
+              <p className="text-sm text-slate-600">How finance leaders and founders describe working with Global CFO.</p>
             </CardHeader>
             <CardContent className="space-y-6">
               {testimonials.map((item) => (
@@ -367,9 +437,11 @@ function LandingPage() {
               ))}
             </CardContent>
           </Card>
-          <Card className="border-slate-200 shadow-sm rounded-none">
-            <CardHeader>
-              <CardTitle className="text-2xl">Latest insights</CardTitle>
+          <Card className="border-slate-200 shadow-none rounded-none">
+            <CardHeader className="space-y-2">
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Insights</p>
+              <CardTitle className="text-2xl text-primary">Latest insights</CardTitle>
+              <p className="text-sm text-slate-600">Audit-ready checklists, monthly close playbooks, and compliance watchouts.</p>
             </CardHeader>
             <CardContent className="space-y-4">
               {blogHighlights.map((post) => (
@@ -378,7 +450,7 @@ function LandingPage() {
                     <p className="text-primary font-semibold">{post.title}</p>
                     <p className="text-xs uppercase tracking-wide text-slate-500">{post.date}</p>
                   </div>
-                  <Button variant="outline" onClick={() => navigate(post.link)} className="rounded-none">
+                  <Button variant="outline" onClick={() => navigate(post.link)} className="rounded-none" data-testid={`insight-${post.title}`}>
                     Read
                   </Button>
                 </div>
