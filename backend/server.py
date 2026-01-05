@@ -13,6 +13,9 @@ from datetime import datetime, timezone, timedelta
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 import base64
+import smtplib
+from email.message import EmailMessage
+import json
 
 
 ROOT_DIR = Path(__file__).parent
@@ -69,6 +72,7 @@ class UserRegister(BaseModel):
     full_name: str
     role: str = UserRole.CLIENT
     company_name: Optional[str] = None
+    industry: Optional[str] = None
 
 
 class UserLogin(BaseModel):
@@ -92,6 +96,7 @@ class Company(BaseModel):
     address: Optional[str] = None
     phone: Optional[str] = None
     fiscal_year_end: Optional[str] = None
+    industry: Optional[str] = None
     owner_id: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -104,6 +109,7 @@ class CompanyCreate(BaseModel):
     address: Optional[str] = None
     phone: Optional[str] = None
     fiscal_year_end: Optional[str] = None
+    industry: Optional[str] = None
 
 
 class Document(BaseModel):
@@ -197,6 +203,52 @@ class AuditLog(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
+class ContactRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: EmailStr
+    phone: Optional[str] = None
+    service_interest: Optional[str] = None
+    message: str
+    source: str = "contact_form"
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class NewsletterSubscriber(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    email: EmailStr
+    name: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class SMSLead(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: Optional[str] = None
+    phone_number: str
+    interest: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class IntakeSubmission(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    full_name: str
+    email: EmailStr
+    business_name: Optional[str] = None
+    industry: Optional[str] = None
+    service_interest: Optional[str] = None
+    consultation_requested: bool = False
+    preferred_time: Optional[str] = None
+    notes: Optional[str] = None
+    storage_preference: Optional[str] = None
+    document_links: List[str] = []
+    uploaded_files: List[dict] = []
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
 # ============ HELPER FUNCTIONS ============
 
 def clean_mongo_doc(doc):
@@ -261,6 +313,33 @@ async def log_audit(user_id: str, action: str, resource: str, resource_id: str, 
     await db.audit_logs.insert_one(audit_dict)
 
 
+def send_notification_email(subject: str, body: str):
+    smtp_host = os.getenv("SMTP_HOST")
+    smtp_user = os.getenv("SMTP_USER")
+    smtp_password = os.getenv("SMTP_PASS")
+    smtp_port = int(os.getenv("SMTP_PORT", "587"))
+    admin_email = os.getenv("ADMIN_EMAIL")
+
+    if not smtp_host or not admin_email:
+        logger.info("SMTP not configured; skipping email send.")
+        return
+
+    try:
+        message = EmailMessage()
+        message["Subject"] = subject
+        message["From"] = os.getenv("SMTP_FROM", smtp_user or admin_email)
+        message["To"] = admin_email
+        message.set_content(body)
+
+        with smtplib.SMTP(smtp_host, smtp_port) as server:
+            server.starttls()
+            if smtp_user and smtp_password:
+                server.login(smtp_user, smtp_password)
+            server.send_message(message)
+    except Exception as exc:  # pragma: no cover - best-effort notification
+        logger.exception("Failed to send notification email: %s", exc)
+
+
 # ============ AUTH ENDPOINTS ============
 
 @api_router.post("/auth/register", response_model=Token)
@@ -288,7 +367,8 @@ async def register(user_data: UserRegister):
     if user_data.role == UserRole.CLIENT and user_data.company_name:
         company = Company(
             company_name=user_data.company_name,
-            owner_id=user.id
+            owner_id=user.id,
+            industry=user_data.industry
         )
         company_dict = company.model_dump()
         company_dict['created_at'] = company_dict['created_at'].isoformat()
@@ -667,6 +747,114 @@ async def get_audit_logs(
     
     logs = await db.audit_logs.find(query).sort("timestamp", -1).to_list(1000)
     return [clean_mongo_doc(log) for log in logs]
+
+
+# ============ MARKETING & INTAKE ENDPOINTS ============
+
+@api_router.post("/marketing/contact")
+async def submit_contact(contact: ContactRequest):
+    contact_dict = contact.model_dump()
+    contact_dict["created_at"] = contact_dict["created_at"].isoformat()
+    await db.contact_requests.insert_one(contact_dict)
+
+    email_body = (
+        f"New contact request from {contact.name}\n\n"
+        f"Email: {contact.email}\n"
+        f"Phone: {contact.phone or 'N/A'}\n"
+        f"Service Interest: {contact.service_interest or 'N/A'}\n"
+        f"Message:\n{contact.message}"
+    )
+    send_notification_email("New BizBooks contact inquiry", email_body)
+    return {"message": "Contact request received"}
+
+
+@api_router.post("/marketing/newsletter")
+async def subscribe_newsletter(subscriber: NewsletterSubscriber):
+    existing = await db.newsletter_subscribers.find_one({"email": subscriber.email})
+    if existing:
+        return {"message": "Already subscribed"}
+
+    subscriber_dict = subscriber.model_dump()
+    subscriber_dict["created_at"] = subscriber_dict["created_at"].isoformat()
+    await db.newsletter_subscribers.insert_one(subscriber_dict)
+    send_notification_email("New newsletter subscriber", f"Email: {subscriber.email}\nName: {subscriber.name or 'N/A'}")
+    return {"message": "Subscribed successfully"}
+
+
+@api_router.post("/marketing/sms")
+async def create_sms_lead(lead: SMSLead):
+    lead_dict = lead.model_dump()
+    lead_dict["created_at"] = lead_dict["created_at"].isoformat()
+    await db.sms_leads.insert_one(lead_dict)
+    send_notification_email("New SMS lead capture", f"Name: {lead.name or 'N/A'}\nPhone: {lead.phone_number}\nInterest: {lead.interest or 'N/A'}")
+    return {"message": "Lead captured"}
+
+
+@api_router.post("/marketing/intake")
+async def submit_intake(
+    full_name: str = Form(...),
+    email: EmailStr = Form(...),
+    business_name: Optional[str] = Form(None),
+    industry: Optional[str] = Form(None),
+    service_interest: Optional[str] = Form(None),
+    consultation_requested: bool = Form(False),
+    preferred_time: Optional[str] = Form(None),
+    notes: Optional[str] = Form(None),
+    storage_preference: Optional[str] = Form(None),
+    document_links: Optional[str] = Form(None),
+    files: List[UploadFile] = File(None),
+):
+    links: List[str] = []
+    if document_links:
+        try:
+            parsed_links = json.loads(document_links)
+            if isinstance(parsed_links, list):
+                links = [str(item) for item in parsed_links]
+        except json.JSONDecodeError:
+            links = [document_links]
+
+    uploaded_files: List[dict] = []
+    if files:
+        for upload in files:
+            content = await upload.read()
+            if len(content) > 10 * 1024 * 1024:
+                raise HTTPException(status_code=400, detail="Each file must be under 10MB")
+            uploaded_files.append(
+                {
+                    "filename": upload.filename,
+                    "content_type": upload.content_type,
+                    "size": len(content),
+                    "data": base64.b64encode(content).decode("utf-8"),
+                }
+            )
+
+    intake = IntakeSubmission(
+        full_name=full_name,
+        email=email,
+        business_name=business_name,
+        industry=industry,
+        service_interest=service_interest,
+        consultation_requested=consultation_requested,
+        preferred_time=preferred_time,
+        notes=notes,
+        storage_preference=storage_preference,
+        document_links=links,
+        uploaded_files=uploaded_files,
+    )
+    intake_dict = intake.model_dump()
+    intake_dict["created_at"] = intake_dict["created_at"].isoformat()
+
+    await db.intake_submissions.insert_one(intake_dict)
+    send_notification_email(
+        "New client intake submission",
+        f"Name: {full_name}\nEmail: {email}\nBusiness: {business_name or 'N/A'}\n"
+        f"Industry: {industry or 'N/A'}\nService Interest: {service_interest or 'N/A'}\n"
+        f"Consultation requested: {'Yes' if consultation_requested else 'No'}\n"
+        f"Preferred time: {preferred_time or 'N/A'}\nNotes: {notes or 'N/A'}\n"
+        f"Links: {', '.join(links) if links else 'None'}\n"
+        f"Attachments: {len(uploaded_files)} file(s)"
+    )
+    return {"message": "Intake submitted successfully"}
 
 
 # Include the router in the main app

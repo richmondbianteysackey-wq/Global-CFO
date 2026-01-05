@@ -54,4 +54,13 @@ export const api = {
   // Audit Logs
   getAuditLogs: (companyId) =>
     axios.get(`${API_URL}/audit-logs${companyId ? `?company_id=${companyId}` : ''}`, getAuthHeaders()),
+
+  // Marketing & Intake (public)
+  submitContact: (data) => axios.post(`${API_URL}/marketing/contact`, data),
+  subscribeNewsletter: (data) => axios.post(`${API_URL}/marketing/newsletter`, data),
+  submitSmsLead: (data) => axios.post(`${API_URL}/marketing/sms`, data),
+  submitIntake: (formData) =>
+    axios.post(`${API_URL}/marketing/intake`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
 };

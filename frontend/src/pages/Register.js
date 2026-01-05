@@ -18,6 +18,7 @@ function Register() {
     full_name: '',
     role: 'client',
     company_name: '',
+    industry: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -33,7 +34,8 @@ function Register() {
         formData.password,
         formData.full_name,
         formData.role,
-        formData.company_name
+        formData.company_name,
+        formData.industry
       );
       toast.success('Registration successful!');
       
@@ -158,6 +160,21 @@ function Register() {
                       required={formData.role === 'client'}
                       placeholder="Acme Corporation"
                       data-testid="company-name-input"
+                      className="h-11 rounded-sm border-slate-300 focus:ring-2 focus:ring-accent focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="industry" className="block text-sm font-medium mb-1.5 text-slate-700">
+                      Industry
+                    </label>
+                    <Input
+                      id="industry"
+                      type="text"
+                      value={formData.industry}
+                      onChange={(e) => handleChange('industry', e.target.value)}
+                      required={formData.role === 'client'}
+                      placeholder="Ecommerce, SaaS, etc."
+                      data-testid="industry-input"
                       className="h-11 rounded-sm border-slate-300 focus:ring-2 focus:ring-accent focus:border-transparent"
                     />
                   </div>
